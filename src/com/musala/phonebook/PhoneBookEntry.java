@@ -15,10 +15,6 @@ public class PhoneBookEntry implements Comparable<PhoneBookEntry> {
 			throw new IllegalArgumentException("The name cannot be null or empty.");
 		}
 
-		if (number == null || number.trim().isEmpty()) {
-			throw new IllegalArgumentException("The number cannot be null or empty.");
-		}
-
 		if (!PhoneBookEntry.isValidNumber(number.trim())) {
 			throw new IllegalArgumentException("The number is not valid.");
 		}
