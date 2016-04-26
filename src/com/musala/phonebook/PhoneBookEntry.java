@@ -1,6 +1,11 @@
 package com.musala.phonebook;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class PhoneBookEntry implements Comparable<PhoneBookEntry> {
+
+	private static final Pattern pattern = Pattern.compile("^(\\+359|0|00359)8[7-9][2-9]\\d{6}$");
 
 	private String name;
 	private String number;
@@ -53,5 +58,14 @@ public class PhoneBookEntry implements Comparable<PhoneBookEntry> {
 	@Override
 	public int compareTo(PhoneBookEntry phoneBookEntry) {
 		return name.compareTo(phoneBookEntry.getName());
+	}
+
+	public static boolean isValidNumber(String number) {
+		Matcher matcher = pattern.matcher(number);
+		if (matcher.matches()) {
+			return true;
+		}
+
+		return false;
 	}
 }

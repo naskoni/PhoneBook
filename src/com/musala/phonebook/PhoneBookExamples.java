@@ -18,9 +18,8 @@ public class PhoneBookExamples {
 			phoneBook.loadEntries(FILE_PATH);
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
-		} catch (IllegalArgumentException e) {
-			System.out.println(e.getMessage());
 		}
+
 		phoneBook.printEntries();
 		printSeparatorLine();
 
@@ -28,7 +27,10 @@ public class PhoneBookExamples {
 		phoneBook.addEntry("Kiril", "0876543717");
 		phoneBook.addEntry("Radko", "0888888388");
 		phoneBook.addEntry("Atanaska", "0897999062");
-		phoneBook.addEntry("Atanas", "0890999061");
+
+		// uncomment to try add invalid number
+		// phoneBook.addEntry("Atanas", "0890999061");
+
 		phoneBook.printEntries();
 		printSeparatorLine();
 
