@@ -11,21 +11,27 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.musala.phonebook.interfaces.OutputWriter;
+
 public class PhoneBook {
 
-	private static final String PHONE_REGEX = "^(\\+359|0|00359)8[7-9][2-9]\\d{6}$";
 	private static final int ENTRIES_MOST_OUTGOING_CALLS = 5;
 	private static final int MAX_CALLS = 30;
-
+	private static final Pattern pattern = Pattern.compile("^(\\+359|0|00359)8[7-9][2-9]\\d{6}$");
 	private static final Set<PhoneBookEntry> entries = new TreeSet<>();
 	private static final Set<CallLog> callLogs = new TreeSet<>();
 
-	public void loadEntries() {
-		File file = new File("resources/phonebook.txt");
+	private OutputWriter outputWriter;
+
+	public PhoneBook(OutputWriter outputWriter) {
+		this.outputWriter = outputWriter;
+	}
+
+	public void loadEntries(String filePath) throws IOException {
+		File file = new File(filePath);
 
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 			String line;
-
 			while ((line = br.readLine()) != null) {
 				String[] tokens = line.split("\\s+");
 				String name = tokens[0];
@@ -34,33 +40,35 @@ public class PhoneBook {
 				addEntry(name, number);
 			}
 		} catch (FileNotFoundException e) {
-			System.out.println("File not found or cannot be opened.");
-		} catch (IOException e) {
-			e.printStackTrace();
+			throw new IOException("File not found or cannot be opened.", e);
+		} catch (IllegalArgumentException e) {
+			throw new IllegalArgumentException(e.getMessage(), e);
 		}
 	}
 
 	public void addEntry(String name, String number) {
 		if (!isValidNumber(number.trim())) {
-			System.out.printf("The number: [%s] associated with name: [%s] is not valid.%n", number, name);
+			String message = String.format("The number: [%s] associated with name: [%s] is not valid.%n", number, name);
+			outputWriter.printline(message);
 			return;
 		}
 
 		PhoneBookEntry phoneBookEntry = new PhoneBookEntry(name, number);
 		if (entries.contains(phoneBookEntry)) {
-			System.out.printf("An entry with this name: [%s] already exist.%n", name);
+			String message = String.format("An entry with this name: [%s] already exist.%n", name);
+			outputWriter.printline(message);
 			return;
 		}
 
-		entries.add(new PhoneBookEntry(name, number));
+		entries.add(phoneBookEntry);
 	}
 
-	public void deleteEntry(String name) {
+	public boolean deleteEntry(String name) {
 		if (entries.removeIf(e -> name.equals(e.getName()))) {
-			System.out.printf("The entry with this name: [%s] was deleted.%n", name);
-		} else {
-			System.out.printf("The entry with this name: [%s] does not exist.%n", name);
+			return true;
 		}
+
+		return false;
 	}
 
 	public String findNumber(String name) {
@@ -68,25 +76,19 @@ public class PhoneBook {
 	}
 
 	public void printEntries() {
-		printSeparatorLine();
 		for (PhoneBookEntry entry : entries) {
-			System.out.println(entry);
+			outputWriter.printline(entry);
 		}
-
-		printSeparatorLine();
 	}
 
 	public void printMostOutgoingCalls() {
-		printSeparatorLine();
 		int counter = 0;
 		for (CallLog callLog : callLogs) {
-			System.out.println(callLog);
+			outputWriter.printline(callLog);
 			if (++counter == ENTRIES_MOST_OUTGOING_CALLS) {
 				break;
 			}
 		}
-
-		printSeparatorLine();
 	}
 
 	public void generateCalls() {
@@ -99,14 +101,8 @@ public class PhoneBook {
 		}
 	}
 
-	private void printSeparatorLine() {
-		System.out.println("--------------------");
-	}
-
 	private boolean isValidNumber(String number) {
-		Pattern pattern = Pattern.compile(PHONE_REGEX);
 		Matcher matcher = pattern.matcher(number);
-
 		if (matcher.matches()) {
 			return true;
 		}

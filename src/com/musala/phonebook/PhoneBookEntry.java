@@ -7,7 +7,11 @@ public class PhoneBookEntry implements Comparable<PhoneBookEntry> {
 
 	public PhoneBookEntry(String name, String number) {
 		if (name == null || name.trim().isEmpty()) {
-			System.out.println("The name cannot be null or empty.");
+			throw new IllegalArgumentException("The name cannot be null or empty.");
+		}
+
+		if (number == null || number.trim().isEmpty()) {
+			throw new IllegalArgumentException("The number cannot be null or empty.");
 		}
 
 		this.name = name;
