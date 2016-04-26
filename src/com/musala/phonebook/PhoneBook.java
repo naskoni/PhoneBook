@@ -54,7 +54,6 @@ public class PhoneBook {
 		}
 
 		entries.add(phoneBookEntry);
-
 	}
 
 	public boolean deleteEntry(String name) {
@@ -94,5 +93,4 @@ public class PhoneBook {
 			callLogs.add(callLog);
 		}
 	}
-
 }

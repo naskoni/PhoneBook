@@ -28,7 +28,7 @@ public class PhoneBookExamples {
 		phoneBook.addEntry("Radko", "0888888388");
 		phoneBook.addEntry("Atanaska", "0897999062");
 
-		// uncomment to try add invalid number
+		// uncomment to try add an invalid number:
 		// phoneBook.addEntry("Atanas", "0890999061");
 
 		phoneBook.printEntries();
