@@ -19,6 +19,10 @@ public class PhoneBookEntry implements Comparable<PhoneBookEntry> {
 			throw new IllegalArgumentException("The number cannot be null or empty.");
 		}
 
+		if (!PhoneBookEntry.isValidNumber(number.trim())) {
+			throw new IllegalArgumentException("The number is not valid.");
+		}
+
 		this.name = name;
 		this.number = number;
 	}

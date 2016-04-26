@@ -47,9 +47,7 @@ public class PhoneBook {
 		}
 
 		PhoneBookEntry phoneBookEntry = new PhoneBookEntry(name, number);
-		if (entries.contains(phoneBookEntry))
-
-		{
+		if (entries.contains(phoneBookEntry)) {
 			String message = String.format("An entry with this name: [%s] already exist.%n", name);
 			outputWriter.printline(message);
 			return;
