@@ -16,7 +16,8 @@ public class PhoneBookEntry implements Comparable<PhoneBookEntry> {
 		}
 
 		if (!PhoneBookEntry.isValidNumber(number.trim())) {
-			throw new IllegalArgumentException("The number is not valid.");
+			String message = String.format("The number: [%s] is not valid.", number);
+			throw new IllegalArgumentException(message);
 		}
 
 		this.name = name;
